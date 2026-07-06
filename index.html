@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form Pengaduan</title>
+<style>
+  :root{
+    --bg: #2b2820;
+    --panel: #34302650;
+    --panel-solid: #34302680;
+    --cream: #eef2ea;
+    --mustard: #c99a3f;
+    --field: #211f1a;
+    --green: #1f3b2c;
+    --green-border: #7d8f80;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'Segoe UI', Verdana, sans-serif;
+    padding: 40px 20px;
+  }
+  h1{
+    font-family: 'Trebuchet MS', sans-serif;
+    letter-spacing: 2px;
+    font-weight: 700;
+    font-size: 2.4rem;
+    line-height: 1.15;
+    margin: 0 0 20px 0;
+  }
+  .wrap{
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  @media (max-width: 800px){
+    .wrap{ grid-template-columns: 1fr; }
+  }
+  .intro p{
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #e4e4dc;
+    max-width: 420px;
+  }
+  .panel{
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 32px;
+  }
+  label{
+    display:block;
+    color: var(--mustard);
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  input, textarea{
+    width: 100%;
+    background: var(--field);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    color: var(--cream);
+    padding: 14px 16px;
+    font-size: 1rem;
+    font-family: inherit;
+    margin-bottom: 24px;
+    resize: vertical;
+  }
+  textarea{ min-height: 130px; }
+  input::placeholder, textarea::placeholder{ color: #7c7a70; }
+  input:focus, textarea:focus{
+    outline: none;
+    border-color: var(--mustard);
+  }
+  button{
+    width: 100%;
+    background: var(--green);
+    border: 1px solid var(--green-border);
+    color: var(--cream);
+    letter-spacing: 2px;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform .1s ease, background .2s ease;
+  }
+  button:hover{ background: #274a35; }
+  button:active{ transform: scale(0.99); }
+  .note{
+    margin-top: 18px;
+    font-size: 0.9rem;
+    color: #c9c7bd;
+    line-height: 1.6;
+  }
+  .error{
+    color: #e0a25a;
+    font-size: 0.85rem;
+    margin-top: -18px;
+    margin-bottom: 16px;
+    display:none;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="intro">
+      <h1>FORM<br>PENGADUAN</h1>
+      <p>Isi data di bawah ini, lalu tekan tombol kirim — pesan Anda akan otomatis terbuka di WhatsApp untuk dikirim ke admin kami.</p>
+    </div>
+
+    <div class="panel">
+      <label for="nama">Nama Lengkap</label>
+      <input type="text" id="nama" placeholder="Nama Anda">
+
+      <label for="hp">No. HP / WhatsApp</label>
+      <input type="tel" id="hp" placeholder="08xx-xxxx-xxxx">
+
+      <label for="pesan">Pesan / Keluhan</label>
+      <textarea id="pesan" placeholder="Jelaskan keluhan Anda di sini..."></textarea>
+      <div class="error" id="errorMsg">Mohon isi semua kolom terlebih dahulu.</div>
+
+      <button onclick="kirimPengaduan()">KIRIM PENGADUAN VIA WHATSAPP →</button>
+
+      <div class="note">Pengaduan akan langsung terkirim ke WhatsApp admin: +62 882-7752-3340.</div>
+    </div>
+  </div>
+
+  <script>
+    const NOMOR_WA = "6288277523340"; // 088277523340 dalam format internasional
+
+    function kirimPengaduan(){
+      const nama = document.getElementById('nama').value.trim();
+      const hp = document.getElementById('hp').value.trim();
+      const pesan = document.getElementById('pesan').value.trim();
+      const errorEl = document.getElementById('errorMsg');
+
+      if(!nama || !hp || !pesan){
+        errorEl.style.display = 'block';
+        return;
+      }
+      errorEl.style.display = 'none';
+
+      const teks =
+`Halo Admin, saya ingin menyampaikan pengaduan:
+
+Nama: ${nama}
+No. HP: ${hp}
+
+Keluhan:
+${pesan}`;
+
+      const url = `https://wa.me/${NOMOR_WA}?text=${encodeURIComponent(teks)}`;
+      window.open(url, '_blank');
+    }
+  </script>
+</body>
+</html>
